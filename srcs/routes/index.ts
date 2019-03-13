@@ -11,7 +11,7 @@ export const router = express()
 router.use('/swagger.json', swaggerHandler())
 router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-router.use('/', UserRoutes)
+router.use('/user', UserRoutes)
 
 router.use((_req: any, res: any) => {
   res.status(404).json({
