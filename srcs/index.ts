@@ -1,41 +1,33 @@
 import express from 'express'
+import expressWinston from 'express-winston'
 import bodyParser from 'body-parser'
-import swaggerUi from 'swagger-ui-express'
-import swaggerJSDoc from 'swagger-jsdoc'
 
-const app = express()
-const port = 8080
-const swaggerSpec = swaggerJSDoc({
-  swaggerDefinition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Hello World',
-      version: '1.0.0',
-      description: 'A sample API'
-    },
-    host: 'localhost'
-  },
-  // Path to the API docs
-  // Note that this path is relative to the current directory from which the
-  // Node.js is ran, not the application itself.
-  apis: ['srcs/**/*.ts']
-})
+import { router } from './routes/index'
+import { configService } from './config'
+import { logger } from './logger'
 
-app.use(bodyParser.json())
+class App {
+  readonly app: express.Application = express()
 
-app.use('/swagger.json', (_req: express.Request, res: express.Response) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
-})
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-app.use('/users', require('./routes/users'))
+  constructor () {
+    this.app.use(bodyParser.json())
 
-app.use((_req: any, res: any) => {
-  res.status(404).json({
-    message: 'not found'
-  })
-})
+    this.app.use(expressWinston.logger({
+      winstonInstance: logger
+    }))
 
-app.listen(port, () => {
-  console.log(`Server started at http://localhost:${port}`)
-})
+    this.app.use(router)
+
+    this.app.use(expressWinston.errorLogger({
+      winstonInstance: logger
+    }))
+  }
+
+  start () {
+    this.app.listen(configService.port, () => {
+      logger.info(`${configService.logger.labels.service_name} started on port ${configService.port}`)
+    })
+  }
+}
+
+new App().start()
