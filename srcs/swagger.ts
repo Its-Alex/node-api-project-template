@@ -41,6 +41,7 @@ export const swaggerSpec = swaggerJSDoc({
   // Path to the API docs
   // Note that this path is relative to the current directory from which the
   // Node.js is ran, not the application itself.
+  // You can add some definitions in a swaggers folders at your root project.
   apis: ['swagger/*.yaml', 'srcs/**/*.ts']
 })
 
