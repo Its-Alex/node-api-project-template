@@ -37,6 +37,11 @@ In `package.json` I often have at least five scripts:
 I prefer to use each CLI on code with npm like that we doesn't need to install
 global package and CLI in node_modules will be used
 
+## Docker
+
+I create a [Dockerfile](/Dockerfile) with mutlistage who first build project then run the
+outputed files in a second stage.
+
 # License
 
 [MIT](https://en.wikipedia.org/wiki/MIT_License)
