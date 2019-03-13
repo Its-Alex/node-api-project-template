@@ -1,4 +1,4 @@
-# express-project-template
+# node-api-project-template
 
 This is a node api project template to see how I work
 
